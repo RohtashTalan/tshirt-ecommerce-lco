@@ -1,0 +1,20 @@
+{
+  "name": "tshirt-lco",
+  "version": "1.0.0",
+  "description": "a tshirt store ecomm project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "backend",
+    "api"
+  ],
+  "author": "Rohtash Talan",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.32.0",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
