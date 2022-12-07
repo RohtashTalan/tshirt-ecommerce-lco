@@ -1,7 +1,13 @@
+const BigPromise = require('../middlewares/bigPromise');
 
-exports.home = (req, res) => {
+
+
+exports.home =BigPromise(async(req, res) => {
+    
 res.status(200).json({
     success:true,
     messsage:'hello from home page api'
 })
-}
+
+
+})
