@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const env = process.env;
 
+
 const config = {
   PORT: env.PORT,
   JWT_SECRET: env.JWT_SECRET,
