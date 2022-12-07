@@ -4,8 +4,6 @@ const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 
 const app = express();
-const home =  require('./routes/home');
-
 // morgan middleware
 app.use(morgan('tiny'))
 
@@ -19,7 +17,12 @@ app.use(fileUpload())
 
 
 // import all routes here
+const home =  require('./routes/home');
+const user = require('./routes/user')
+
+// router middleware
 app.use('/api/v1', home)
+app.use('/api/v1/', user)
 
 
 

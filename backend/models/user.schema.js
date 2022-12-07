@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
-import validator from "validator";
-import bcrypt from 'bcryptjs';
-import  Jwt  from "jsonwebtoken";
-import crypto from 'crypto';
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require('bcryptjs');
+const  Jwt  = require("jsonwebtoken");
+const crypto = require('crypto');
 
 // custom files import
-import config  from "../config/env";
-import authRoles from "../utils/authRoles";
+const config  = require("../config/env");
+const authRoles = require("../utils/authRoles");
 
 
 const userSchema = new mongoose.Schema({

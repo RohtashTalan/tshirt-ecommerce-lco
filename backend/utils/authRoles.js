@@ -8,4 +8,4 @@ const authRoles={
 }
 
 
-export default authRoles;
+module.exports=authRoles;
