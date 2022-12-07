@@ -1,19 +1,21 @@
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require("cloudinary").v2;
 const User = require("../models/user.schema");
 const BigPromise = require("../middlewares/bigPromise");
 const CustomError = require("../utils/customError");
-const cookieToken = require('../utils/cookieToken');
+const cookieToken = require("../utils/cookieToken");
 
 
-exports.signup = BigPromise( async(req, res, next) => {
-let result='';
-    if(req.files){
-        let file = req.files.photos;
-     result = await cloudinary.uploader.upload(file.tempFilePath, {
-            folder: 'users'
-        });
-    } 
+// signup route
+exports.signup = BigPromise(async (req, res, next) => {
+    if (!req.files) {
+        return next(new CustomError("Photo required", 400));
+      }
 
+
+  let file = req.files.photos;
+  let result = await cloudinary.uploader.upload(file.tempFilePath, {
+    folder: "users",
+  });
 
   const { name, email, password } = req.body;
 
@@ -26,13 +28,37 @@ let result='';
     email,
     password,
     photo: {
-        id: result.public_id,
-        secure_url: result.secure_url
-    }
+      id: result.public_id,
+      secure_url: result.secure_url,
+    },
   });
 
-
-  cookieToken(user,res);
-
-
+  cookieToken(user, res);
 });
+
+
+// login route
+exports.login = BigPromise(async (req, res, next) => {
+    const {email, password} = req.body;
+
+    // check for email and password
+    if(!email || !password){return next(new CustomError('Please provide email and password', 400))}
+
+    // get user from db 
+    const user = await User.findOne({email}).select("+password");
+    
+      // noUser
+      if(!user){return next(new CustomError('Email or password is matched', 400))}
+
+      // match the pasword
+      const isPasswordCorrect = await user.isValidatedPassword(password);
+
+           // wrong password
+        if(!isPasswordCorrect){return next(new CustomError('Email or password is matched', 400))}
+
+        // if all goes good we send the token
+        cookieToken(user, res);
+
+
+
+})
