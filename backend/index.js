@@ -15,7 +15,6 @@ cloudinary.config({
     api_secret: config.CLOUDINARY_API_SECRET
   });
 
-  console.log(config.CLOUDINARY_API_SECRET);
 
 
   // app listening

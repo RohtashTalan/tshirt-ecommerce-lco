@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const config = require('../config/env')
 
-const mailHelper = async () => {
+const mailHelper = async (option) => {
   let transporter = nodemailer.createTransport({
     host: config.SMTP_MAIL_HOST,
     port: config.SMTP_MAIL_PORT,
@@ -14,7 +14,7 @@ const mailHelper = async () => {
   const message = {
     from: 'rohtash@vijkom.com', // sender address
     to: option.email, // list of receivers
-    subject: options.subject, // Subject line
+    subject: option.subject, // Subject line
     text: option.message, // plain text body
   }
 

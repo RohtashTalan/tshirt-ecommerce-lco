@@ -8,9 +8,13 @@ const config = {
   JWT_SECRET: env.JWT_SECRET,
   JWT_EXPIRY: env.JWT_EXPIRY,
   MONGODB_URL: env.MONGODB_URL,
+
+  // CLOUDINARY
   CLOUDINARY_CLOUD_NAME: env.cloudinary_cloud_name,
   CLOUDINARY_API_KEY: env.cloudinary_api_key,
   CLOUDINARY_API_SECRET: env.cloudinary_api_secret,
+
+  //MAIL
   SMTP_MAIL_HOST: env.SMTP_MAIL_HOST,
   SMTP_MAIL_PORT: env.SMTP_MAIL_PORT,
   SMTP_MAIL_USERNAME: env.SMTP_MAIL_USERNAME,
