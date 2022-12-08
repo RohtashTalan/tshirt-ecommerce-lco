@@ -3,7 +3,7 @@ const BigPromise = require("../middlewares/bigPromise");
 const CustomError = require("../utils/customError");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary").v2;
-
+const WhereClause = require('../utils/whereClause');
 
 
 exports.addProduct= BigPromise(async(req, res, next) => {
@@ -35,4 +35,24 @@ exports.addProduct= BigPromise(async(req, res, next) => {
         entered: req.body
     })
 
+})
+
+exports.getAllProduct = BigPromise(async(req, res, next) => {
+    const resultPerPage = 6;
+
+    const productsObj =new WhereClause(Product.find(),req.query).search().filter();
+
+    let products = await productsObj.base;
+
+    const filteredProductNumber = products.length;
+
+    productsObj.pager(resultPerPage);
+
+    products = await productsObj.base.clone();
+
+    res.status(200).json({
+        success:true,
+        filteredProductNumber,
+        products
+    })
 })

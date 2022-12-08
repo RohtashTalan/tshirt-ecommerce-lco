@@ -51,6 +51,8 @@ class WhereClause{
 
         this.base = this.base.find(jsonOfCopyQ);
 
+
+        return this;
     }
 
 }
