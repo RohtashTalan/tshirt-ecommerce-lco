@@ -1,6 +1,7 @@
+// base - Product.find()
+// base - Product.find(email: {"hitesh@lco.dev"})
 
-
-
+//bigQ - // search=coder&page=2&category=shortsleeves&rating[gte]=4&price[lte]=999&price[gte]=199&limit=5
 
 class WhereClause{
      constructor(base, bigQ){
@@ -33,5 +34,23 @@ class WhereClause{
        return this;
      }
 
-     
+    filter(){
+        const copyQ = {...this.bigQ};
+
+        // delete some key values
+        delete copyQ["search"];
+        delete copyQ["page"];
+        delete copyQ["limit"];
+
+        //convert bigQ into a string => copyQ
+        let stringofCopyQ = JSON.stringify(copyQ);
+
+        stringofCopyQ = stringofCopyQ.replace(/\b(gte|lte|gt|lt)\b/g, m=> `$${m}`);
+
+        let jsonOfCopyQ = JSON.parse(stringofCopyQ);
+
+        this.base = this.base.find(jsonOfCopyQ);
+
+    }
+
 }
