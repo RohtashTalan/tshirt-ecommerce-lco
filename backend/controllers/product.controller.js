@@ -43,8 +43,82 @@ exports.getSingleProduct = BigPromise(async(req, res, next) =>{
 
 })
 
+exports.addReview = BigPromise(async(req, res, next) => {
+    const {rating, comment, productId} = req.body;
 
+    const review = {
+        user: req.user._id,
+        name: req.user.name,
+        rating: Number(rating),
+        comment
+    }
 
+    const product = await Product.findById(productId);
+
+    const isAlreadyReview = product.reviews.find((rev) => rev.user.toString()===req.user._id.toString())
+
+    if(isAlreadyReview){
+        product.reviews.forEach((review)=>{
+            if(review.user.toString()===req.user._id.toString()){
+                review.comment = comment;
+                review.rating = rating
+            }
+        })
+
+    } else {
+        product.reviews.push(review);
+        product.numberOfReviews = product.reviews.length;
+    }
+    
+    // adjust rating
+    product.rating = product.reviews.reduce((acc, item) => item.rating +acc, 0)/product.reviews.length;
+
+    await product.save({validateBeforeSave:false})
+
+    res.status(200).json({
+        success:true,
+        message:'review added successfuly'
+    })
+    
+})
+
+exports.deleteReview = BigPromise(async(req, res, next) => {
+    const {productId} = req.query;
+
+    const product = await Product.findById(productId);
+
+    const reviews = product.reviews.filter((rev) => rev.user.toString() !== req.user._id.toString())
+
+    const numberOfReviews = reviews.length;
+    
+    // adjust rating
+    product.rating = product.reviews.reduce((acc, item) => item.rating +acc, 0)/product.reviews.length;
+
+   // update the product
+     await Product.findByIdAndUpdate(productId,{
+        reviews,
+        rating,
+        numberOfReviews
+     },{
+        new:true,
+        runValidators:true
+     })
+
+    res.status(200).json({
+        success:true,
+        message:'review Deleted successfuly'
+    })
+    
+})
+
+exports.getOnlyReviewsForSingleProduct = BigPromise(async(req, res, next) => {
+    const product = await Product.findById(req.query.id);
+
+    res.status(200).json({
+        success:true,
+        reviews:product.reviews
+    })
+})
 
 /*
 Admin controllers
@@ -101,7 +175,6 @@ exports.adminUpdateOneProduct = BigPromise(async (req, res, next) => {
     let imageArray=[];
 
     if(req.files){
-
         // destroy the exsiting files
         for (let i = 0; i < product.photos.length; i++) {
             const res = await cloudinary.uploader.destroy(product.photos[i].id)
@@ -116,9 +189,10 @@ exports.adminUpdateOneProduct = BigPromise(async (req, res, next) => {
                 secure_url:result.secure_url
             });
         }
+        
+    req.body.photos = imageArray;
     }
 
-    req.body.photos = imageArray;
 
     product = await Product.findByIdAndUpdate(req.params.id, req.body, {
         new:true,
