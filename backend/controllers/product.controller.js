@@ -6,7 +6,7 @@ const cloudinary = require("cloudinary").v2;
 const WhereClause = require('../utils/whereClause');
 
 
-exports.addProduct= BigPromise(async(req, res, next) => {
+exports.addProduct = BigPromise(async(req, res, next) => {
 
     let imageArray = []
     if(!req.files){return next(new CustomError('Images are required', 401))}
@@ -37,7 +37,7 @@ exports.addProduct= BigPromise(async(req, res, next) => {
 
 })
 
-exports.getAllProduct = BigPromise(async(req, res, next) => {
+exports.getAllProducts = BigPromise(async(req, res, next) => {
     const resultPerPage = 6;
 
     const productsObj =new WhereClause(Product.find(),req.query).search().filter();

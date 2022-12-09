@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const {isLoggedIn, customRole} = require('../middlewares/user');
-const {addProduct, getAllProduct, getSingleProduct, adminGetAllProducts} = require('../controllers/product.controller');
+const {addProduct, getAllProducts, getSingleProduct, adminGetAllProducts} = require('../controllers/product.controller');
 
 // user Routes
-router.route('/products').get(getAllProduct)
+router.route('/products').get(getAllProducts)
 router.route('/product/:id').get(getSingleProduct)
 
 
